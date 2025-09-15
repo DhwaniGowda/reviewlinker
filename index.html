@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Review Page</title>
+  <style>
+    body {
+      background-color: pink;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 60px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    textarea {
+      width: 80%;
+      height: 100px;
+      max-width: 400px;
+      font-size: 16px;
+      padding: 10px;
+      resize: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color:lightsalmon;
+      border: 2px solid #333;
+      cursor: pointer;
+    }
+    .char-count {
+      font-size: 14px;
+      color:black;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Please leave your review here</h1>
+
+  <form>
+    <textarea id="review" maxlength="300" placeholder="Write your review..."></textarea>
+    <div class="char-count" id="wordCount">0 / 20 words</div>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const textarea = document.getElementById("review");
+    const wordCountDisplay = document.getElementById("wordCount");
+
+    textarea.addEventListener("input", () => {
+      const words = textarea.value.trim().split(/\s+/);
+      const wordCount = textarea.value.trim() ? words.length : 0;
+      wordCountDisplay.textContent = `${wordCount} / 20 words`;
+
+      if (wordCount > 20) {
+        textarea.value = words.slice(0, 20).join(" ");
+        wordCountDisplay.textContent = "20 / 20 words";
+      }
+    });
+  </script>
+
+</body>
+</html>
