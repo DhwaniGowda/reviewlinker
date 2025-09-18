@@ -41,28 +41,55 @@
 
   <h1>Please leave your review here</h1>
 
-  <form>
-    <textarea id="review" maxlength="300" placeholder="Write your review..."></textarea>
-    <div class="char-count" id="wordCount">0 / 20 words</div>
-    <br>
-    <button type="submit">Submit</button>
-  </form>
+  <form id="reviewForm">
+  <textarea id="review" maxlength="300" placeholder="Write your review..."></textarea>
+  <div class="char-count" id="wordCount">0 / 20 words</div>
+  <br>
+  <button type="submit">Submit</button>
+  <p id="status"></p>
+</form>
 
-  <script>
-    const textarea = document.getElementById("review");
-    const wordCountDisplay = document.getElementById("wordCount");
+<script>
+  const textarea = document.getElementById("review");
+  const wordCountDisplay = document.getElementById("wordCount");
+  const statusMessage = document.getElementById("status");
 
-    textarea.addEventListener("input", () => {
-      const words = textarea.value.trim().split(/\s+/);
-      const wordCount = textarea.value.trim() ? words.length : 0;
-      wordCountDisplay.textContent = `${wordCount} / 20 words`;
+  textarea.addEventListener("input", () => {
+    const words = textarea.value.trim().split(/\s+/);
+    const wordCount = textarea.value.trim() ? words.length : 0;
+    wordCountDisplay.textContent = `${wordCount} / 20 words`;
 
-      if (wordCount > 20) {
-        textarea.value = words.slice(0, 20).join(" ");
-        wordCountDisplay.textContent = "20 / 20 words";
-      }
+    if (wordCount > 20) {
+      textarea.value = words.slice(0, 20).join(" ");
+      wordCountDisplay.textContent = "20 / 20 words";
+    }
+  });
+
+  document.getElementById("reviewForm").addEventListener("submit", function(e) {
+    e.preventDefault();  // Prevent normal form submission
+
+    const reviewText = textarea.value.trim();
+
+    fetch("https://script.google.com/macros/s/AKfycbwJtFWMt4zde6JbCPZjse7aKjvz3QjxysQgVMe6aRbl7q7YPsrGsckN_PMG1eaFaVRh/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "review=" + encodeURIComponent(reviewText),
+    })
+    .then(res => res.text())
+    .then(response => {
+      statusMessage.textContent = "Thank you! Review submitted.";
+      textarea.value = "";
+      wordCountDisplay.textContent = "0 / 20 words";
+    })
+    .catch(err => {
+      statusMessage.textContent = "Error! Please try again.";
+      console.error(err);
     });
-  </script>
+  });
+</script>
 
 </body>
+</html>
 </html>
